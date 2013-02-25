@@ -13,7 +13,7 @@
 {
 
 	o = PinkNoise.ar(0.3);
-	o = FoaEncode.ar(o, FoaEncoderMatrix.newOmni); //omni-directional
+	o = FoaEncode.ar(o, FoaEncoderMatrix.newOmni); // omni-directional
 
 	FoaDecode.ar(o, ~decoder);
 
@@ -25,7 +25,7 @@
 	var sig;
 
 	o = PinkNoise.ar(0.3);
-	o = FoaEncode.ar(o, FoaEncoderMatrix.newDirection); //plane wave
+	o = FoaEncode.ar(o, FoaEncoderMatrix.newDirection); // plane wave
 
 	FoaDecode.ar(o, ~decoder);
 
@@ -36,7 +36,7 @@
 {
 
 	o = PinkNoise.ar(0.3 ! 4); // note that the AtoB encoder needs 4 input channels
-	o = FoaEncode.ar(o, FoaEncoderMatrix.newAtoB); //diffuse soundfield
+	o = FoaEncode.ar(o, FoaEncoderMatrix.newAtoB); // diffuse soundfield
 
 	FoaDecode.ar(o, ~decoder);
 
