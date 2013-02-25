@@ -22,7 +22,6 @@
 
 (
 {
-	var sig;
 
 	o = PinkNoise.ar(0.3);
 	o = FoaEncode.ar(o, FoaEncoderMatrix.newDirection); // plane wave
@@ -64,7 +63,7 @@
 (
 {
 
-	o = SinOsc.ar(300*[9/8, 49/32, 2/1, 7/4]).madd(2).tanh * 0.3;
+	o = SinOsc.ar(200*[1, 2, 3, 4]).madd(2).tanh * 0.3;
 
 	o = FoaEncode.ar(o, FoaEncoderMatrix.newAtoB);
 
