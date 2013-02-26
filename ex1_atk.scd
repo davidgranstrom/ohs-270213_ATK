@@ -23,7 +23,7 @@
 {
 
 	var o = PinkNoise.ar(0.3);
-	o = FoaEncode.ar(o, FoaEncoderMatrix.newDirection); // plane wave
+	o = FoaEncode.ar(o, FoaEncoderMatrix.newDirection(0, 0)); // plane wave arriving from [0, 0]
 
 	FoaDecode.ar(o, ~decoder);
 
