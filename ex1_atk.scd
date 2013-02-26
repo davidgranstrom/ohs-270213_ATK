@@ -11,8 +11,7 @@
 
 (
 {
-
-	o = PinkNoise.ar(0.3);
+	var o = PinkNoise.ar(0.3);
 	o = FoaEncode.ar(o, FoaEncoderMatrix.newOmni); // omni-directional
 
 	FoaDecode.ar(o, ~decoder);
@@ -23,7 +22,7 @@
 (
 {
 
-	o = PinkNoise.ar(0.3);
+	var o = PinkNoise.ar(0.3);
 	o = FoaEncode.ar(o, FoaEncoderMatrix.newDirection); // plane wave
 
 	FoaDecode.ar(o, ~decoder);
@@ -34,7 +33,7 @@
 (
 {
 
-	o = PinkNoise.ar(0.3 ! 4); // note that the AtoB encoder needs 4 input channels
+	var o = PinkNoise.ar(0.3 ! 4); // note that the AtoB encoder needs 4 input channels
 	o = FoaEncode.ar(o, FoaEncoderMatrix.newAtoB); // diffuse soundfield
 
 	FoaDecode.ar(o, ~decoder);
@@ -49,7 +48,7 @@
 (
 {
 
-	o = PinkNoise.ar(0.3);
+	var o = PinkNoise.ar(0.3);
 	o = FoaEncode.ar(o, FoaEncoderMatrix.newDirection);
 
 	o = FoaTransform.ar(o, 'rotate', LFSaw.kr(0.1, 0, pi));
@@ -63,8 +62,7 @@
 (
 {
 
-	o = SinOsc.ar(200*[1, 2, 3, 4]).madd(2).tanh * 0.3;
-
+	var o = SinOsc.ar(200*[1, 2, 3, 4]).madd(2).tanh * 0.3;
 	o = FoaEncode.ar(o, FoaEncoderMatrix.newAtoB);
 
 	o = FoaTransform.ar(o, 'rtt',
@@ -74,7 +72,6 @@
 	);
 
 	o = FoaTransform.ar(o, 'push',
-
 		MouseY.kr(pi/2, 0), // pi/2 => omni-directional soundfield, 0 => no change
 		MouseX.kr(pi, -pi), // azimuth
 	);
