@@ -1,5 +1,9 @@
-Open Hackspace 270213
-=====================
+# Open Hackspace 270213
+## Introduction to Ambisonic Toolkit
+<http://ambisonictoolkit.net/>  
+<http://supercollider.sourceforge.net/>
 
-Introduction to Ambisonic Toolkit - SuperCollider
--------------------------------------------------
+### Topics
+* Brief introduction to Ambisonics
+* Introducing the Ambisonic Toolkit
+* Examples (Authoring, Imaging, Monitoring)
