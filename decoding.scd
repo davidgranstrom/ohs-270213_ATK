@@ -9,20 +9,26 @@
  
 =========================================================================== */
 
-// CHOOSE A DECODER
-// ----------------
-// matrix decoders 
+// MATRIX DECODERS
+// ---------------
 ~decoder = FoaDecoderMatrix.newStereo;
-~decoder = FoaDecoderMatrix.newPanto(8, 'point');
-~decoder = FoaDecoderMatrix.newDiametric();
+~decoder = FoaDecoderMatrix.newQuad;
+~decoder = FoaDecoderMatrix.newPanto(8, 'point', k: 'single');
+~decoder = FoaDecoderMatrix.newDiametric;
 
-// kernel decoders (remember to free the kernels when you are finished!)
-~decoder = FoaDecoderKernel.newUHJ;
-// binaural decoders
-~decoder = FoaDecoderKernel.newCIPIC;  // try different measurments
-~decoder = FoaDecoderKernel.newSpherical; // try different measurments
+// KERNEL DECODERS (remember to free the kernels when you are finished!)
+// ---------------
+~decoder = FoaDecoderKernel.newUHJ; // UHJ ambisonic 'native' stereo decoder
 
-~decoder.dirChannels.raddeg; // look the directions (convert from radians to degrees)
+// binaural decoders - try different measurments!
+~decoder = FoaDecoderKernel.newCIPIC;     
+~decoder = FoaDecoderKernel.newCIPIC(0044);
+~decoder = FoaDecoderKernel.newSpherical;
+~decoder = FoaDecoderKernel.newListen;
+
+~decoder.dirChannels.raddeg; // look the directions
+
+// note: there are more decoders available, check the documentation.
 
 // EXAMPLES
 // --------
