@@ -9,10 +9,33 @@
 * Examples (Authoring, Imaging, Monitoring)
 
 ## Ambisonics
-* Full 3D surround (with only 4 channels, B-Format)
+Ambisonics is a series of recording and playback techniques invented by Michael
+Gerzon (among others) in the early 1970s. Some of its features includes:
+
+* Full 3D surround (with only 4 channels - First order B-Format)
 * Hierarchical - from mono to 3D surround and binaural
-* Arbitrary speaker setups. Work separatly with directional 
-information (spatialization) from actual speaker positions.
+* Arbitrary speaker setups. The ambisonic signal (B-Format) carries its directional
+information independently from any loudspeaker setup. This means that you can easily decode the 
+B-Format signal into another loudspeaker configuration, without having to worry about altering your
+final mixdown.
+
+To view more of advantages of working with ambisonics, visit for instance [Wikipedia][advantages]
+
+To learn more about ambisonics in general, check out these links:
+
+Wikipedia  
+<http://en.wikipedia.org/wiki/Ambisonics>
+
+Ambisonic.net  
+<http://www.ambisonic.net/>
+
+D.G. Malham, Spatial hearing mechanisms and Sound reproduction  
+<http://www.york.ac.uk/inst/mustech/3d_audio/ambis2.htm>
+
+F. Hollerweger, An Introduction to Higher Order Ambisonic  
+<http://flo.mur.at/writings/HOA-intro.pdf/view>
+
+[advantages]: http://en.wikipedia.org/wiki/Ambisonics#Advantages "Advantages"
 
 ### B-Format
 A first order B-Format signal contains four channels of information, which are called: [ W, X, Y, Z ].
