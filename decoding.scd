@@ -67,31 +67,44 @@
         // place the mouse at the top of the screen to push the soundfield into a single planewave
         sig = FoaTransform.ar(sig, 'push', angle, 0); 
         // monitor
-        FoaDecode.ar(sig, ~decoder);
+        FoaDecode.ar(0.7*sig, ~decoder);
     }.play;
 )
 
 (
-    x = {|distance=1, theta=0, phi=0|
-        var sig;
-        sig = PinkNoise.ar(0.3) * EnvGen.kr(Env.perc(0.01, 0.4), doneAction:2);
-        sig = HPF.ar(sig, 35);
+    /*
+        The proximity effect in audio is an increase in bass or low frequency
+        response when a sound source is close to a microphone. 
+
+        A distance of 0 is not valid, as this would be equivalent to the source
+        being superimposed with the microphone!
+
+        Signals must be highpass filtered before application. (see the help file)
+    */
+    SynthDef(\atk_prox, {|out=0, distance=1, theta=0, phi=0, atk=0.01, decay=0.4|
+        var sig = PinkNoise.ar(0.3) * EnvGen.kr(Env.perc(atk, decay), doneAction:2);
+        sig = HPF.ar(sig, 25);
         // author
         sig = FoaPanB.ar(sig, theta, phi);
         // image (spatial filtering)
         sig = FoaTransform.ar(sig, 'proximity', distance);
         // monitor
-        FoaDecode.ar(sig, ~decoder);
-    };
+        Out.ar(out, FoaDecode.ar(sig, ~decoder));
+    }).add;
 )
+
+Synth(\atk_prox, [\distance, 1.0,   \atk, 0.5, \decay, 0.5]);
+Synth(\atk_prox, [\distance, 0.25,  \atk, 0.5, \decay, 0.5]);
+Synth(\atk_prox, [\distance, 0.035, \atk, 0.5, \decay, 0.5]);
+
 (
-    Routine { 
-        24.do { 
-            var distance = rrand(0.01, 1); // meters
-            x.play(args:[\distance, distance, \theta, rrand(-pi, pi)]);
-            0.12.wait;
-        }
-    }.play;
+    Pbind(
+        \instrument, \atk_prox,
+        \distance,   Pwhite(0.0625, 1.0),
+        \theta,      Pwhite(-pi, pi),
+        \phi,        Pwhite(-pi, pi),
+        \dur,        Pn(0.12, 24)
+    ).play;
 )
 
 ~decoder.free; // free kernels (if any)
