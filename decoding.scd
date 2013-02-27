@@ -9,6 +9,11 @@
  
 =========================================================================== */
 
+// note: there are more decoders available, check the documentation.
+
+s.boot;
+s.meter;
+
 // MATRIX DECODERS
 // ---------------
 ~decoder = FoaDecoderMatrix.newStereo;
@@ -28,10 +33,23 @@
 
 ~decoder.dirChannels.raddeg; // look the directions
 
-// note: there are more decoders available, check the documentation.
+/* 
+    EXAMPLES
+    --------
 
-// EXAMPLES
-// --------
+    First we define a decoder Synth which will be running 
+    in the background for these examples.
+    Remember to not hit CmdPeriod until we are done!
+*/
+
+~bfBus = Bus.audio(s, 4); // bus for the b-format signal (4ch)
+(
+    ~renderDecode = {|out|
+        var in = In.ar(~bfBus, 4);
+        Out.ar(out, FoaDecode.ar(in, ~decoder));
+    }.play;
+)
+
 (
     x = {
         var sig;
@@ -41,14 +59,15 @@
         sig = FoaEncode.ar(sig, FoaEncoderMatrix.newAtoB);
         // image (spatial filtering)
         sig = FoaTransform.ar(sig, 'focus', pi/2, LFSaw.ar(1/3, 0, pi));
-        // monitor
-        FoaDecode.ar(sig, ~decoder);
+        // send to b-format bus
+        Out.ar(~bfBus, sig);
     }.play;
 )
+x.free;
 
 (
     // sources arriving from different points on the sphere
-    x = {
+    y = {
         var sig;
         var angle = MouseY.kr(pi/2, 0);
         var positions = [ 0, 45, 90, 135, -180, -135, -90, -45 ].degrad; // convert to radians
@@ -66,10 +85,11 @@
         }.sum;
         // place the mouse at the top of the screen to push the soundfield into a single planewave
         sig = FoaTransform.ar(sig, 'push', angle, 0); 
-        // monitor
-        FoaDecode.ar(0.7*sig, ~decoder);
+        // send to b-format bus
+        Out.ar(~bfBus, 0.7*sig);
     }.play;
 )
+y.free;
 
 (
     /*
@@ -88,14 +108,15 @@
         sig = FoaPanB.ar(sig, theta, phi);
         // image (spatial filtering)
         sig = FoaTransform.ar(sig, 'proximity', distance);
-        // monitor
-        Out.ar(out, FoaDecode.ar(sig, ~decoder));
+        // send to b-format bus
+        Out.ar(~bfBus, sig);
     }).add;
 )
 
 Synth(\atk_prox, [\distance, 1.0,   \atk, 0.5, \decay, 0.5]);
 Synth(\atk_prox, [\distance, 0.25,  \atk, 0.5, \decay, 0.5]);
-Synth(\atk_prox, [\distance, 0.035, \atk, 0.5, \decay, 0.5]);
+Synth(\atk_prox, [\distance, 0.125, \atk, 0.5, \decay, 0.5]);
+Synth(\atk_prox, [\distance, 0.0625, \atk, 0.5, \decay, 0.5]);
 
 (
     Pbind(
