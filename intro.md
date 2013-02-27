@@ -24,6 +24,8 @@ If one uses this analogy this would mean that:
 * Y – 'left/right' the output from a figure-of-eight microphone.
 * Z – 'up/down' the output from a figure-of-eight microphone.
 
+![B-Format](https://raw.github.com/davidgranstrom/ohs-270213_ATK/master/images/bformat.png)
+
 ## Ambisonic Toolkit
 
 The Ambisonic Toolkit (ATK) is a SuperCollider library which provides a set of different
