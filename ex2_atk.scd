@@ -4,6 +4,7 @@
 // =====================
 
 ~decoder = FoaDecoderKernel.newUHJ;
+~buffer = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
 
 // -----------------
 // Encoding examples
@@ -11,7 +12,7 @@
 
 (
 {
-	var o = PinkNoise.ar(0.3);
+	var o = PlayBuf.ar(1, ~buffer, loop: 1) * 0.3;
 	o = FoaEncode.ar(o, FoaEncoderMatrix.newOmni); // omni-directional
 
 	FoaDecode.ar(o, ~decoder);
@@ -22,7 +23,7 @@
 (
 {
 
-	var o = PinkNoise.ar(0.3);
+	var o = PlayBuf.ar(1, ~buffer, loop: 1) * 0.3;
 	o = FoaEncode.ar(o, FoaEncoderMatrix.newDirection(0, 0)); // plane wave arriving from [0, 0]
 
 	FoaDecode.ar(o, ~decoder);
@@ -33,7 +34,7 @@
 (
 {
 
-	var o = PinkNoise.ar(0.3 ! 4); // note that the AtoB encoder needs 4 input channels
+	var o = PlayBuf.ar(1, ~buffer, rate: [0.75, 1, 1.125, 1.35], loop: 1) * 0.3; // note that the AtoB encoder needs 4 input channels
 	o = FoaEncode.ar(o, FoaEncoderMatrix.newAtoB); // diffuse soundfield
 
 	FoaDecode.ar(o, ~decoder);
@@ -48,7 +49,7 @@
 (
 {
 
-	var o = PinkNoise.ar(0.3);
+	var o = PlayBuf.ar(1, ~buffer, loop: 1) * 0.3;
 	o = FoaEncode.ar(o, FoaEncoderMatrix.newDirection);
 
 	o = FoaTransform.ar(o, 'rotate', LFSaw.kr(0.1, 0, pi));
@@ -62,7 +63,7 @@
 (
 {
 
-	var o = SinOsc.ar(200*[1, 2, 3, 4]).madd(2).tanh * 0.3;
+	var o = PlayBuf.ar(1, ~buffer, rate: [0.75, 1, 1.125, 1.35], loop: 1) * 0.3;
 	o = FoaEncode.ar(o, FoaEncoderMatrix.newAtoB);
 
 	o = FoaTransform.ar(o, 'rtt',
