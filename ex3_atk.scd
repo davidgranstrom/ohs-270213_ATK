@@ -52,15 +52,14 @@ s.meter;
 
 (
     x = {
-        var sig;
         // 4ch decorrelated noise (A-Format)
-        sig = PinkNoise.ar(0.3!4) * Decay2.ar(Impulse.ar(4), 0.01, 0.5);
+        var o = PinkNoise.ar(0.3!4) * Decay2.ar(Impulse.ar(4), 0.01, 0.5);
         // author
-        sig = FoaEncode.ar(sig, FoaEncoderMatrix.newAtoB);
+        o = FoaEncode.ar(o, FoaEncoderMatrix.newAtoB);
         // image (spatial filtering)
-        sig = FoaTransform.ar(sig, 'focus', pi/2, LFSaw.ar(1/3, 0, pi));
+        o = FoaTransform.ar(o, 'focus', pi/2, LFSaw.ar(1/3, 0, pi));
         // send to b-format bus
-        Out.ar(~bfBus, sig);
+        Out.ar(~bfBus, o);
     }.play;
 )
 x.free;
@@ -68,25 +67,25 @@ x.free;
 (
     // sources arriving from different points on the sphere
     y = {
-        var sig;
-        var angle = MouseY.kr(pi/2, 0);
-        var positions = [ 0, 45, 90, 135, -180, -135, -90, -45 ].degrad; // convert to radians
+        var theta = MouseX.kr(pi, -pi),
+        angle = MouseY.kr(pi/2, 0),
+        positions = [ 0, 45, 90, 135, -180, -135, -90, -45 ].degrad, // convert to radians
         // generate separate signals for each position
-        sig = positions.size.collect {|i|
+        o = positions.size.collect {|i|
             var freqs = 110*((i+1)**2) + { rrand(0.0, 25.0) }.dup(4);
             var amps  = 1/(1..freqs.size).sqrt;
             var rings = { rrand(0.1,0.75) }.dup(freqs.size);
             var ex = OnePole.ar(Impulse.ar(4 + SinOsc.kr(1/rrand(2.0,8.0))), 0.9);
             Klank.ar(`[ freqs, amps, rings ], 0.1*ex);
         };
-        sig = positions.collect{|theta, i|
+        o = positions.collect{|theta, i|
             // encode each signal as planewaves arriving from point along the sphere
-            FoaEncode.ar(sig[i], FoaEncoderMatrix.newDirection(theta));
+            FoaEncode.ar(o[i], FoaEncoderMatrix.newDirection(theta));
         }.sum;
         // place the mouse at the top of the screen to push the soundfield into a single planewave
-        sig = FoaTransform.ar(sig, 'push', angle, 0); 
+        o = FoaTransform.ar(o, 'push', angle, theta);
         // send to b-format bus
-        Out.ar(~bfBus, 0.7*sig);
+        Out.ar(~bfBus, 0.7*o);
     }.play;
 )
 y.free;
@@ -102,14 +101,14 @@ y.free;
         Signals must be highpass filtered before application. (see the help file)
     */
     SynthDef(\atk_prox, {|out=0, distance=1, theta=0, phi=0, atk=0.01, decay=0.4|
-        var sig = PinkNoise.ar(0.3) * EnvGen.kr(Env.perc(atk, decay), doneAction:2);
-        sig = HPF.ar(sig, 25);
+        var o = PinkNoise.ar(0.3) * EnvGen.kr(Env.perc(atk, decay), doneAction:2);
+        o = HPF.ar(o, 25);
         // author
-        sig = FoaPanB.ar(sig, theta, phi);
+        o = FoaPanB.ar(o, theta, phi);
         // image (spatial filtering)
-        sig = FoaTransform.ar(sig, 'proximity', distance);
+        o = FoaTransform.ar(o, 'proximity', distance);
         // send to b-format bus
-        Out.ar(~bfBus, sig);
+        Out.ar(~bfBus, o);
     }).add;
 )
 
